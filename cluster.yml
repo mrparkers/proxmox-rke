@@ -1,0 +1,15 @@
+cluster_name: rke
+kubernetes_version: v1.15.6-rancher1-2
+ssh_key_path: keys/rke
+nodes:
+  - address: 192.168.50.100
+    user: rke
+    hostname_override: rke-master-0
+    role:
+      - controlplane
+      - etcd
+  - address: 192.168.50.101
+    user: rke
+    hostname_override: rke-worker-0
+    role:
+      - worker

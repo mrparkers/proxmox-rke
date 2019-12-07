@@ -1,0 +1,91 @@
+{
+  "variables": {
+    "proxmox_username":  "root@pam",
+    "proxmox_password": "{{env `PROXMOX_PASSWORD`}}",
+    "proxmox_url": "https://{{env `PROXMOX_HOST`}}:8006/api2/json",
+
+    "ssh_username": "root",
+    "ssh_password": "{{env `ROOT_SSH_PASSWORD`}}",
+
+    "iso": "ubuntu-18.04.3-server-amd64.iso",
+
+    "httpIP": "{{env `HTTPIP`}}"
+  },
+  "builders": [
+    {
+      "type": "proxmox",
+      "proxmox_url": "{{user `proxmox_url`}}",
+      "insecure_skip_tls_verify": true,
+      "username": "{{user `proxmox_username`}}",
+      "password": "{{user `proxmox_password`}}",
+      "node": "batcave",
+      "network_adapters": [
+        {
+          "bridge": "vmbr0",
+          "model": "virtio"
+        }
+      ],
+      "disks": [
+        {
+          "storage_pool": "zfs",
+          "storage_pool_type": "zfspool",
+          "disk_size": "128G"
+        }
+      ],
+      "memory": 16384,
+      "cores": 4,
+
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_timeout": "30m",
+      "iso_file": "local:iso/{{user `iso`}}",
+      "unmount_iso": true,
+      "http_directory": "http",
+
+      "boot_wait": "10s",
+      "boot_command": [
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz<wait> ",
+        "initrd=/install/initrd.gz ",
+        "auto-install/enable=true ",
+        "debconf/priority=critical ",
+        "preseed/url=http://{{user `httpIP`}}:{{.HTTPPort}}/preseed.cfg<wait> ",
+        " -- <wait>",
+        "<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "env {{ .Vars }} {{ .Path }}",
+      "script": "scripts/enable-modules.sh"
+    },
+    {
+      "type": "shell",
+      "execute_command": "env {{ .Vars }} {{ .Path }}",
+      "script": "scripts/install-software.sh"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "mkdir -p /home/rke/.ssh"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "keys/rke.pub",
+      "destination": "/home/rke/.ssh/rke.pub"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "touch /home/rke/.ssh/authorized_keys",
+        "cat /home/rke/.ssh/rke.pub >> /home/rke/.ssh/authorized_keys",
+        "chown -R rke /home/rke/.ssh"
+      ]
+    }
+  ]
+}
