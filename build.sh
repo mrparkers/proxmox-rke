@@ -6,8 +6,6 @@ function cleanup() {
     rm http/preseed.cfg
 }
 
-trap cleanup EXIT
-
 if [[ -z "${ROOT_SSH_PASSWORD}" ]]; then
     echo "ROOT_SSH_PASSWORD is required"
     exit 1
@@ -27,6 +25,8 @@ if [[ -z "${PROXMOX_HOST}" ]]; then
     echo "PROXMOX_HOST is required"
     exit 1
 fi
+
+trap cleanup EXIT
 
 export HTTPIP=$(ipconfig getifaddr en0)
 

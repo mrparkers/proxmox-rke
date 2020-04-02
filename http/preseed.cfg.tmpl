@@ -61,7 +61,7 @@ d-i preseed/late_command string \
 
 ### Package selection
 tasksel tasksel/first standard
-d-i pkgsel/include string openssh-server qemu-guest-agent sudo vim curl
+d-i pkgsel/include string openssh-server qemu-guest-agent sudo vim curl lvm2
 d-i pkgsel/install-language-support boolean false
 
 # disable automatic package updates

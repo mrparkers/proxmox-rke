@@ -1,6 +1,8 @@
 cluster_name: rke
-kubernetes_version: v1.15.6-rancher1-2
+kubernetes_version: v1.16.3-rancher1-1
 ssh_key_path: keys/rke
+authorization:
+  mode: rbac
 nodes:
   - address: 192.168.50.100
     user: rke
@@ -11,5 +13,15 @@ nodes:
   - address: 192.168.50.101
     user: rke
     hostname_override: rke-worker-0
+    role:
+      - worker
+  - address: 192.168.50.102
+    user: rke
+    hostname_override: rke-worker-1
+    role:
+      - worker
+  - address: 192.168.50.103
+    user: rke
+    hostname_override: rke-worker-2
     role:
       - worker
