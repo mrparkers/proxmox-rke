@@ -1,0 +1,10 @@
+provider: google
+sources:
+  - ingress
+
+triggerLoopOnEvent: true
+logLevel: debug
+policy: sync
+
+google:
+  project: parker-gg
