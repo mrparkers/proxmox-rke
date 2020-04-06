@@ -14,7 +14,7 @@ resource "helm_release" "external_dns_target_admission" {
   name       = "external-dns-target-admission"
   namespace  = kubernetes_namespace.external_dns.metadata[0].name
   repository = data.helm_repository.mrparkers.name
-  version    = "v0.1.0"
+  version    = "v0.2.0"
 
   wait = true
 

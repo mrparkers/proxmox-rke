@@ -3,8 +3,8 @@ sources:
   - ingress
 
 triggerLoopOnEvent: true
-logLevel: debug
 policy: sync
+interval: 10m
 
 google:
   project: parker-gg
