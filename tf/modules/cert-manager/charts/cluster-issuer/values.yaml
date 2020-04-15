@@ -1,0 +1,4 @@
+acmeServer: ""
+gcpProject: parker-gg
+serviceAccountSecret: ""
+serviceAccountSecretKey: ""

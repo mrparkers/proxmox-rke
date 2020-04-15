@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: wildcard-certificate
+  annotations:
+    "cert-manager.io/issue-temporary-certificate": "true"
+spec:
+  secretName: {{ .Values.certificateSecretName }}
+  issuerRef:
+    kind: ClusterIssuer
+    name: {{ .Values.clusterIssuerName }}
+  dnsNames:
+    - "parker.gg"
+    - "*.parker.gg"

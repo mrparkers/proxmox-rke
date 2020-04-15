@@ -24,11 +24,11 @@ provider "helm" {
 
 resource "kubernetes_ingress" "hello_world" {
   metadata {
-    name      = "hello-world"
-    namespace = "default"
-//    annotations = {
-//      "foo" = "bar"
-//    }
+    name        = "hello-world"
+    namespace   = "default"
+    annotations = {
+      "nginx.ingress.kubernetes.io/force-ssl-redirect" = "true"
+    }
   }
   spec {
     rule {

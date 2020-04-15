@@ -50,3 +50,30 @@ resource "helm_release" "cert_manager" {
     null_resource.wait_for_crds
   ]
 }
+
+locals {
+  letsencrypt_prod    = "https://acme-v02.api.letsencrypt.org/directory"
+  letsencrypt_staging = "https://acme-staging-v02.api.letsencrypt.org/directory"
+}
+
+resource "helm_release" "cluster_issuer" {
+  name      = "gcp-cluster-issuer"
+  namespace = kubernetes_namespace.cert_manager.metadata[0].name
+  chart     = "${path.module}/charts/cluster-issuer"
+  wait      = true
+
+  set {
+    name  = "acmeServer"
+    value = local.letsencrypt_prod
+  }
+
+  set {
+    name  = "serviceAccountSecret"
+    value = kubernetes_secret.cert_manager_service_account.metadata[0].name
+  }
+
+  set {
+    name  = "serviceAccountSecretKey"
+    value = "credentials.json"
+  }
+}

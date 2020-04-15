@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: gcp-cluster-issuer
+spec:
+  acme:
+    email: michael@parker.gg
+    server: {{ .Values.acmeServer | quote }}
+    privateKeySecretRef:
+      name: gcp-cluster-issuer-account-key
+    solvers:
+      - dns01:
+          clouddns:
+            project: {{ .Values.gcpProject }}
+            serviceAccountSecretRef:
+              name: {{ .Values.serviceAccountSecret }}
+              key: {{ .Values.serviceAccountSecretKey }}

@@ -24,4 +24,6 @@ module "external_dns" {
 
 module "nginx_ingress" {
   source = "../modules/nginx-ingress"
+
+  cluster_issuer_name = module.cert_manager.cluster_issuer_name
 }
