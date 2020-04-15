@@ -21,3 +21,27 @@ provider "helm" {
     config_context = "rke"
   }
 }
+
+resource "kubernetes_ingress" "hello_world" {
+  metadata {
+    name      = "hello-world"
+    namespace = "default"
+//    annotations = {
+//      "foo" = "bar"
+//    }
+  }
+  spec {
+    rule {
+      host = "test.parker.gg"
+      http {
+        path {
+          path = "/"
+          backend {
+            service_name = "hello-world"
+            service_port = "5555"
+          }
+        }
+      }
+    }
+  }
+}
