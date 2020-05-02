@@ -27,3 +27,22 @@ module "nginx_ingress" {
 
   cluster_issuer_name = module.cert_manager.cluster_issuer_name
 }
+
+// drone
+
+data "google_secret_manager_secret_version" "drone_github_client_id" {
+  provider = google-beta
+  secret   = "github-client-id"
+}
+
+data "google_secret_manager_secret_version" "drone_github_client_secret" {
+  provider = google-beta
+  secret   = "github-client-secret"
+}
+
+module "drone" {
+  source = "../modules/drone"
+
+  github_client_id     = data.google_secret_manager_secret_version.drone_github_client_id.secret_data
+  github_client_secret = data.google_secret_manager_secret_version.drone_github_client_secret.secret_data
+}
