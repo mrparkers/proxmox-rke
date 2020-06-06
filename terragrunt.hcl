@@ -8,5 +8,5 @@ remote_state {
 }
 
 terraform {
-  source = ".//src"
+  source = "./tf//src"
 }

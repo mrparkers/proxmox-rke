@@ -31,16 +31,11 @@ resource "null_resource" "wait_for_crds" {
   ]
 }
 
-data "helm_repository" "jetstack" {
-  name = "jetstack"
-  url  = "https://charts.jetstack.io"
-}
-
 resource "helm_release" "cert_manager" {
-  chart      = "jetstack/cert-manager"
+  chart      = "cert-manager"
   name       = "cert-manager"
   namespace  = kubernetes_namespace.cert_manager.metadata[0].name
-  repository = data.helm_repository.jetstack.name
+  repository = "https://charts.jetstack.io"
   version    = "v0.14.1"
 
   wait = true

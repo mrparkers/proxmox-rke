@@ -4,16 +4,11 @@ resource "kubernetes_namespace" "external_dns" {
   }
 }
 
-data "helm_repository" "mrparkers" {
-  name = "mrparkers"
-  url  = "https://mrparkers.github.io/charts"
-}
-
 resource "helm_release" "external_dns_target_admission" {
-  chart      = "mrparkers/external-dns-target-admission"
+  chart      = "external-dns-target-admission"
   name       = "external-dns-target-admission"
   namespace  = kubernetes_namespace.external_dns.metadata[0].name
-  repository = data.helm_repository.mrparkers.name
+  repository = "https://mrparkers.github.io/charts"
   version    = "v0.2.0"
 
   wait = true
@@ -35,17 +30,14 @@ resource "kubernetes_secret" "external_dns_service_account" {
   }
 }
 
-data "helm_repository" "bitnami" {
-  name = "bitnami"
-  url  = "https://charts.bitnami.com/bitnami"
-}
-
 resource "helm_release" "external_dns" {
-  chart = "bitnami/external-dns"
+  chart = "external-dns"
   name  = "external-dns"
   namespace  = kubernetes_namespace.external_dns.metadata[0].name
-  repository = data.helm_repository.bitnami.name
+  repository = "https://charts.bitnami.com/bitnami"
   version    = "2.20.10"
+
+  wait = true
 
   values = [
     file("${path.module}/values.yaml")
@@ -55,4 +47,8 @@ resource "helm_release" "external_dns" {
     name  = "google.serviceAccountSecret"
     value = kubernetes_secret.external_dns_service_account.metadata[0].name
   }
+
+  depends_on = [
+    helm_release.external_dns_target_admission
+  ]
 }

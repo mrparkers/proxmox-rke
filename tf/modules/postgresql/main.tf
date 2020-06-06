@@ -1,13 +1,8 @@
-data "helm_repository" "bitnami" {
-  name = "bitnami"
-  url  = "https://charts.bitnami.com/bitnami"
-}
-
 resource "helm_release" "postgresql" {
-  chart      = "bitnami/postgresql"
+  chart      = "postgresql"
   name       = "postgresql"
   namespace  = var.namespace
-  repository = data.helm_repository.bitnami.name
+  repository = "https://charts.bitnami.com/bitnami"
   version    = "8.9.0"
 
   set_sensitive {
@@ -23,5 +18,10 @@ resource "helm_release" "postgresql" {
   set {
     name  = "postgresqlDatabase"
     value = var.database
+  }
+
+  set {
+    name  = "global.storageClass"
+    value = var.storage_class
   }
 }

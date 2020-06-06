@@ -12,22 +12,18 @@ resource "random_password" "drone_db_password" {
 module "postgresql" {
   source = "../postgresql"
 
-  namespace = kubernetes_namespace.drone.metadata[0].name
-  database  = "drone"
-  username  = "drone"
-  password  = random_password.drone_db_password.result
-}
-
-data "helm_repository" "stable" {
-  name = "stable"
-  url  = "https://kubernetes-charts.storage.googleapis.com"
+  namespace     = kubernetes_namespace.drone.metadata[0].name
+  database      = "drone"
+  username      = "drone"
+  password      = random_password.drone_db_password.result
+  storage_class = var.postgres_storage_class
 }
 
 resource "helm_release" "drone" {
-  chart      = "stable/drone"
+  chart      = "drone"
   name       = "drone"
   namespace  = kubernetes_namespace.drone.metadata[0].name
-  repository = data.helm_repository.stable.name
+  repository = "https://kubernetes-charts.storage.googleapis.com"
   version    = "2.7.2"
 
   wait = true
@@ -43,7 +39,7 @@ resource "helm_release" "drone" {
       postgres_port     = "5432"
       postgres_database = "drone"
 
-      host = "drone.parker.gg"
+      host  = "drone.parker.gg"
       admin = "mrparkers"
 
       users = join(",", [
@@ -56,4 +52,61 @@ resource "helm_release" "drone" {
   depends_on = [
     module.postgresql
   ]
+}
+
+resource "kubernetes_role" "drone_pipeline" {
+  metadata {
+    name      = "drone-pipeline"
+    namespace = kubernetes_namespace.drone.metadata[0].name
+  }
+
+  rule {
+    api_groups = [
+      ""
+    ]
+    resources  = [
+      "secrets"
+    ]
+    verbs      = [
+      "create",
+      "delete"
+    ]
+  }
+
+  rule {
+    api_groups = [
+      ""
+    ]
+    resources  = [
+      "pods",
+      "pods/log"
+    ]
+    verbs      = [
+      "get",
+      "create",
+      "delete",
+      "list",
+      "watch",
+      "update"
+    ]
+  }
+}
+
+resource "kubernetes_role_binding" "drone_pipeline" {
+  metadata {
+    name      = "drone-pipeline"
+    namespace = kubernetes_namespace.drone.metadata[0].name
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = kubernetes_role.drone_pipeline.metadata[0].name
+  }
+
+  subject {
+    kind      = "ServiceAccount"
+    name      = "drone-drone-pipeline"
+    namespace = kubernetes_namespace.drone.metadata[0].name
+  }
 }

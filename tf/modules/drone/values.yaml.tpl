@@ -27,6 +27,7 @@ server:
     color: true
   env:
     DRONE_USER_FILTER: ${users}
+    DRONE_JSONNET_ENABLED: "true"
 
 runner:
   enabled: true
