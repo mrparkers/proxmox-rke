@@ -53,3 +53,11 @@ module "drone" {
   github_client_secret   = data.google_secret_manager_secret_version.drone_github_client_secret.secret_data
   postgres_storage_class = module.ceph.storage_class
 }
+
+// prometheus / grafana
+
+module "prometheus_operator" {
+  source = "../modules/prometheus-operator"
+
+  storage_class = module.ceph.storage_class
+}
