@@ -28,6 +28,9 @@ server:
   env:
     DRONE_USER_FILTER: ${users}
     DRONE_JSONNET_ENABLED: "true"
+    DRONE_LOGS_TEXT: "true"
+    DRONE_LOGS_PRETTY: "true"
+    DRONE_LOGS_COLOR: "true"
 
 runner:
   enabled: true

@@ -23,7 +23,3 @@ provider "helm" {
     config_context = "rke"
   }
 }
-
-output "test" {
-  value = "hi"
-}
