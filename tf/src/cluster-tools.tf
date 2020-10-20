@@ -67,3 +67,9 @@ module "prometheus_operator" {
 module "sonarqube" {
   source = "../modules/sonarqube"
 }
+
+// jfrog container registry
+
+module "jcr" {
+  source = "../modules/jcr"
+}
