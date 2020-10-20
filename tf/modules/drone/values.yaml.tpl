@@ -12,7 +12,6 @@ sourceControl:
     clientSecretValue: ${github_client_secret}
 
 server:
-  adminUser: ${admin}
   host: ${host}
   protocol: https
   database:
@@ -26,6 +25,7 @@ server:
     pretty: true
     color: true
   env:
+    DRONE_USER_CREATE: username:${admin_user},machine:false,admin:true,token:${admin_token}
     DRONE_USER_FILTER: ${users}
     DRONE_JSONNET_ENABLED: "true"
     DRONE_LOGS_TEXT: "true"

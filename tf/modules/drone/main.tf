@@ -9,6 +9,11 @@ resource "random_password" "drone_db_password" {
   special = false
 }
 
+resource "random_password" "drone_admin_token" {
+  length  = 24
+  special = false
+}
+
 module "postgresql" {
   source = "../postgresql"
 
@@ -35,12 +40,13 @@ resource "helm_release" "drone" {
 
       postgres_user     = "drone"
       postgres_password = random_password.drone_db_password.result
-      postgres_service  = "postgresql.drone.svc.cluster.local"
-      postgres_port     = "5432"
+      postgres_service  = module.postgresql.postgres_service
+      postgres_port     = module.postgresql.postgres_port
       postgres_database = "drone"
 
-      host  = "drone.parker.gg"
-      admin = "mrparkers"
+      host        = "drone.parker.gg"
+      admin_user  = "mrparkers"
+      admin_token = random_password.drone_admin_token.result
 
       users = join(",", [
         "mrparkers",
@@ -109,4 +115,19 @@ resource "kubernetes_role_binding" "drone_pipeline" {
     name      = "drone-drone-pipeline"
     namespace = kubernetes_namespace.drone.metadata[0].name
   }
+}
+
+resource "random_password" "drone_prometheus_token" {
+  length  = 24
+  special = false
+}
+
+resource "null_resource" "drone_prometheus_user" {
+  provisioner "local-exec" {
+    command = "DRONE_SERVER=https://drone.parker.gg DRONE_TOKEN=${random_password.drone_admin_token.result} drone user add prometheus --admin --machine --token ${random_password.drone_prometheus_token.result}"
+  }
+
+  depends_on = [
+    helm_release.drone
+  ]
 }
