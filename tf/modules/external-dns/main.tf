@@ -9,7 +9,7 @@ resource "helm_release" "external_dns_target_admission" {
   name       = "external-dns-target-admission"
   namespace  = kubernetes_namespace.external_dns.metadata[0].name
   repository = "https://mrparkers.github.io/charts"
-  version    = "v0.2.0"
+  version    = "v0.3.0"
 
   wait = true
 
