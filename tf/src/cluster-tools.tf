@@ -61,3 +61,9 @@ module "prometheus_operator" {
 
   storage_class = module.ceph.storage_class
 }
+
+// sonarqube
+
+module "sonarqube" {
+  source = "../modules/sonarqube"
+}
