@@ -17,8 +17,6 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version = "1.2.1"
-
   kubernetes {
     config_context = "rke"
   }
