@@ -23,7 +23,7 @@ resource "kubernetes_secret" "grafana_admin_password" {
 resource "helm_release" "prometheus_operator" {
   name       = "prometheus-operator"
   namespace  = kubernetes_namespace.monitoring.metadata[0].name
-  repository = "https://kubernetes-charts.storage.googleapis.com"
+  repository = "https://charts.helm.sh/stable"
   chart      = "prometheus-operator"
   version    = "8.14.0"
   timeout    = 600

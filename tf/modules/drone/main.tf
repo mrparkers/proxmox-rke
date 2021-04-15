@@ -28,7 +28,7 @@ resource "helm_release" "drone" {
   chart      = "drone"
   name       = "drone"
   namespace  = kubernetes_namespace.drone.metadata[0].name
-  repository = "https://kubernetes-charts.storage.googleapis.com"
+  repository = "https://charts.helm.sh/stable"
   version    = "2.7.2"
 
   wait = true

@@ -1,5 +1,5 @@
 cluster_name: rke
-kubernetes_version: v1.17.5-rancher1-1
+kubernetes_version: v1.20.5-rancher1-1
 ssh_key_path: keys/rke
 authorization:
   mode: rbac

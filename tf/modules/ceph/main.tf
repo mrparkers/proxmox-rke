@@ -24,12 +24,16 @@ resource "helm_release" "ceph_cluster" {
   chart = "${path.module}/charts/ceph-cluster"
 
   wait = true
+
+  depends_on = [
+    helm_release.rook_ceph
+  ]
 }
 
-// ceph cluster takes a while to provision, so wait 2-3 minutes before creating the storage class
+// ceph cluster takes a while to provision, so wait 5 minutes before creating the storage class
 resource "null_resource" "wait_for_ceph_cluster" {
   provisioner "local-exec" {
-    command = "sleep 180"
+    command = "sleep 300"
   }
 
   depends_on = [
@@ -48,4 +52,8 @@ resource "helm_release" "ceph_storage_class" {
     name  = "storage_class"
     value = local.storage_class
   }
+
+  depends_on = [
+    null_resource.wait_for_ceph_cluster
+  ]
 }

@@ -1,14 +1,11 @@
 {
   "variables": {
-    "proxmox_username":  "root@pam",
+    "proxmox_username": "root@pam",
     "proxmox_password": "{{env `PROXMOX_PASSWORD`}}",
     "proxmox_url": "https://{{env `PROXMOX_HOST`}}:8006/api2/json",
-
     "ssh_username": "root",
     "ssh_password": "{{env `ROOT_SSH_PASSWORD`}}",
-
     "iso": "ubuntu-18.04.3-server-amd64.iso",
-
     "httpIP": "{{env `HTTPIP`}}"
   },
   "builders": [
@@ -34,14 +31,16 @@
       ],
       "memory": 16384,
       "cores": 4,
-
       "ssh_username": "{{user `ssh_username`}}",
       "ssh_password": "{{user `ssh_password`}}",
       "ssh_timeout": "30m",
       "iso_file": "local:iso/{{user `iso`}}",
       "unmount_iso": true,
       "http_directory": "http",
-
+      "qemu_agent": true,
+      "template_name": "rke",
+      "template_description": "rke",
+      "boot": "order=scsi0;ide2",
       "boot_wait": "15s",
       "boot_command": [
         "<esc><wait>",

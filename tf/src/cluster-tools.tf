@@ -46,13 +46,13 @@ data "google_secret_manager_secret_version" "drone_github_client_secret" {
   secret   = "github-client-secret"
 }
 
-module "drone" {
-  source = "../modules/drone"
-
-  github_client_id       = data.google_secret_manager_secret_version.drone_github_client_id.secret_data
-  github_client_secret   = data.google_secret_manager_secret_version.drone_github_client_secret.secret_data
-  postgres_storage_class = module.ceph.storage_class
-}
+#module "drone" {
+#  source = "../modules/drone"
+#
+#  github_client_id       = data.google_secret_manager_secret_version.drone_github_client_id.secret_data
+#  github_client_secret   = data.google_secret_manager_secret_version.drone_github_client_secret.secret_data
+#  postgres_storage_class = module.ceph.storage_class
+#}
 
 // prometheus / grafana
 
@@ -64,12 +64,12 @@ module "prometheus_operator" {
 
 // sonarqube
 
-module "sonarqube" {
-  source = "../modules/sonarqube"
-}
+#module "sonarqube" {
+#  source = "../modules/sonarqube"
+#}
 
 // jfrog container registry
 
-module "jcr" {
-  source = "../modules/jcr"
-}
+#module "jcr" {
+#  source = "../modules/jcr"
+#}
