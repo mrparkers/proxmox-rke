@@ -36,15 +36,15 @@ module "nginx_ingress" {
 
 // drone
 
-data "google_secret_manager_secret_version" "drone_github_client_id" {
-  provider = google-beta
-  secret   = "github-client-id"
-}
-
-data "google_secret_manager_secret_version" "drone_github_client_secret" {
-  provider = google-beta
-  secret   = "github-client-secret"
-}
+#data "google_secret_manager_secret_version" "drone_github_client_id" {
+#  provider = google-beta
+#  secret   = "github-client-id"
+#}
+#
+#data "google_secret_manager_secret_version" "drone_github_client_secret" {
+#  provider = google-beta
+#  secret   = "github-client-secret"
+#}
 
 #module "drone" {
 #  source = "../modules/drone"

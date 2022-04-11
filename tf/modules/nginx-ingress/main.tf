@@ -24,6 +24,11 @@ resource "helm_release" "nginx_ingress" {
     value = "${kubernetes_namespace.nginx_ingress.metadata[0].name}/${local.certificate_secret_name}"
   }
 
+  set {
+    name  = "controller.extraArgs.enable-ssl-passthrough"
+    value = "true"
+  }
+
   depends_on = [
     helm_release.wildcard_certificate
   ]
