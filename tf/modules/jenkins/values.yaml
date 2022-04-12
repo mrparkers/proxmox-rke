@@ -1,0 +1,17 @@
+controller:
+  ingress:
+    enabled: true
+    apiVersion: "networking.k8s.io/v1"
+    annotations:
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    hostName: jenkins.parker.gg
+    tls:
+      - hosts:
+          - jenkins.parker.gg
+  installPlugins:
+    - configuration-as-code:1414.v878271fc496f
+    - kubernetes:1.31.3
+    - workflow-aggregator:2.6
+    - git:4.10.2
+  JCasC:
+    defaultConfig: false

@@ -5,7 +5,7 @@ resource "kubernetes_namespace" "external_dns" {
 }
 
 resource "helm_release" "external_dns_target_admission" {
-  chart      = "/Users/parker/Developer/mrparkers-charts/charts/external-dns-target-admission"
+  chart      = "external-dns-target-admission"
   name       = "external-dns-target-admission"
   namespace  = kubernetes_namespace.external_dns.metadata[0].name
   repository = "https://mrparkers.github.io/charts"

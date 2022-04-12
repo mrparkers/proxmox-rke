@@ -15,8 +15,7 @@ module "cert_manager" {
 // external-dns
 
 data "google_secret_manager_secret_version" "external_dns_public_ip_address" {
-  provider = google-beta
-  secret   = "public-ip-address"
+  secret = "public-ip-address"
 }
 
 module "external_dns" {
@@ -37,13 +36,11 @@ module "nginx_ingress" {
 // drone
 
 #data "google_secret_manager_secret_version" "drone_github_client_id" {
-#  provider = google-beta
-#  secret   = "github-client-id"
+#  secret = "github-client-id"
 #}
 #
 #data "google_secret_manager_secret_version" "drone_github_client_secret" {
-#  provider = google-beta
-#  secret   = "github-client-secret"
+#  secret = "github-client-secret"
 #}
 
 #module "drone" {
@@ -73,3 +70,9 @@ module "prometheus_operator" {
 #module "jcr" {
 #  source = "../modules/jcr"
 #}
+
+// jenkins
+
+module "jenkins" {
+  source = "../modules/jenkins"
+}
