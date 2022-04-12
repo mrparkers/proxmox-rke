@@ -4,13 +4,15 @@ resource "google_service_account" "dns_admin" {
 }
 
 resource "google_project_iam_member" "dns_admin_dns_admin" {
-  member = "serviceAccount:${google_service_account.dns_admin.email}"
-  role   = "roles/dns.admin"
+  project = "parker-gg"
+  member  = "serviceAccount:${google_service_account.dns_admin.email}"
+  role    = "roles/dns.admin"
 }
 
 resource "google_project_iam_member" "dns_admin_viewer" {
-  member = "serviceAccount:${google_service_account.dns_admin.email}"
-  role   = "roles/viewer"
+  project = "parker-gg"
+  member  = "serviceAccount:${google_service_account.dns_admin.email}"
+  role    = "roles/viewer"
 }
 
 resource "google_service_account_key" "dns_admin" {
