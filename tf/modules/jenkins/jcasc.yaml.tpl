@@ -80,6 +80,21 @@ jenkins:
                 resourceLimitCpu: 500m
                 resourceRequestMemory: 64Mi
                 resourceLimitMemory: 128Mi
+          - name: "codeql-jdk11"
+            label: "codeql-jdk11"
+            nodeUsageMode: NORMAL
+            containers:
+              - name: "agent"
+                image: "harbor.parker.gg/library/codeql-jdk11:latest"
+                alwaysPullImage: false
+                workingDir: "/home/jenkins/agent"
+                command: "/bin/bash -c"
+                args: "cat"
+                ttyEnabled: true
+                resourceLimitCpu: 2
+                resourceLimitMemory: 2Gi
+                resourceRequestCpu: 512m
+                resourceRequestMemory: 512Mi
             volumes:
               - hostPathVolume:
                   hostPath: "/var/run/docker.sock"
@@ -97,3 +112,13 @@ security:
 unclassified:
   location:
     url: https://jenkins.parker.gg
+  themeManager:
+    disableUserThemes: true
+    theme: "darkSystem"
+  gitHubConfiguration:
+    apiRateLimitChecker: ThrottleForNormalize
+  gitHubPluginConfig:
+    configs:
+      - credentialsId: "${github_pat_secret_name}"
+        name: "GitHub"
+    hookUrl: "https://jenkins.parker.gg/github-webhook/"
