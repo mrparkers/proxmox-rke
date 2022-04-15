@@ -4,3 +4,10 @@ controller:
     useHostPort: true
   service:
     enabled: false
+resources:
+  requests:
+    cpu: 10m
+    memory: 128Mi
+  limits:
+    cpu: 20m
+    memory: 192Mi

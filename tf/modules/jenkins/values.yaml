@@ -1,0 +1,27 @@
+controller:
+  tag: "2.336-jdk11"
+  ingress:
+    enabled: true
+    apiVersion: "networking.k8s.io/v1"
+    annotations:
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    hostName: jenkins.parker.gg
+    tls:
+      - hosts:
+          - jenkins.parker.gg
+  installPlugins:
+    - configuration-as-code:1414.v878271fc496f
+    - kubernetes:1.31.3
+    - kubernetes-credentials-provider:0.20
+    - workflow-aggregator:2.6
+    - git:4.10.2
+    - dark-theme:165.vb_9cb_da_25112e
+    - github:1.34.3
+    - github-branch-source:1598.v91207e9f9b_4a_
+    - plain-credentials:1.8
+    - credentials-binding:1.27.1
+  JCasC:
+    defaultConfig: false
+
+rbac:
+  readSecrets: true

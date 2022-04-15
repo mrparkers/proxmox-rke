@@ -15,35 +15,19 @@ resource "kubernetes_secret" "cert_manager_service_account" {
   }
 }
 
-resource "helm_release" "crds" {
-  name      = "cert-manager-crds"
-  namespace = kubernetes_namespace.cert_manager.metadata[0].name
-  chart     = "${path.module}/charts/crds"
-  wait      = true
-}
-
-resource "null_resource" "wait_for_crds" {
-  provisioner "local-exec" {
-    command = "sleep 30"
-  }
-  depends_on = [
-    helm_release.crds
-  ]
-}
-
 resource "helm_release" "cert_manager" {
   chart      = "cert-manager"
   name       = "cert-manager"
   namespace  = kubernetes_namespace.cert_manager.metadata[0].name
   repository = "https://charts.jetstack.io"
-  version    = "v0.14.1"
+  version    = "v1.6.0"
 
   wait = true
 
-  depends_on = [
-    helm_release.crds,
-    null_resource.wait_for_crds
-  ]
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
 }
 
 locals {
@@ -71,4 +55,8 @@ resource "helm_release" "cluster_issuer" {
     name  = "serviceAccountSecretKey"
     value = "credentials.json"
   }
+
+  depends_on = [
+    helm_release.cert_manager
+  ]
 }
